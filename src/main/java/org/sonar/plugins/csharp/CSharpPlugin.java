@@ -44,7 +44,14 @@ import java.util.List;
       "do not get incremented. If set to \"false\", those file headers are considered as comments and metrics such as " +
       "\"Comment lines\" get incremented.",
     project = true, global = true,
-    type = PropertyType.BOOLEAN)
+    type = PropertyType.BOOLEAN),
+    @Property(
+      key = CSharpSquidConstants.DEFINED_SYMBOLS,
+      defaultValue = "",
+      name = "Comma-separated list of combilation symbols to define",
+      description = "If set, while influence preprocessing directive while parsing.",
+      project = true, global = true
+    )
 })
 public class CSharpPlugin extends SonarPlugin {
 
