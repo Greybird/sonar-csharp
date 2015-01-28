@@ -71,38 +71,43 @@ public class StandardPreprocessorLinePreprocessor extends Preprocessor {
       if (token.getType() != CSharpTokenType.PREPROCESSOR) {
         if (IsActive(isActiveStack)) {
           tokensToInsert.add(token);
+        }
+      } else {
+        String[] dirAndValue = getDirectiveAndValue(token);
+        String dir = dirAndValue[0];
+        if (dir.equals("define")) {
+          locallyDefinedSymbols.add(dirAndValue[1]);
+        } else if (dir.equals("undef")) {
+          while (locallyDefinedSymbols.remove(dirAndValue[1])) {
+          }
+        } else if (dir.equals("if")) {
+          isActiveStack.add(isConditionTrue(dirAndValue[1]));
+        } else if (dir.equals("elif")) {
+          isActiveStack.remove(isActiveStack.size() - 1);
+          isActiveStack.add(isConditionTrue(dirAndValue[1]));
+        } else if (dir.equals("else")) {
+          isActiveStack.set(isActiveStack.size() - 1, !(isActiveStack.get(isActiveStack.size() - 1)));
+        } else if (dir.equals("endif")) {
+          isActiveStack.remove(isActiveStack.size() - 1);
         } else {
           triviasToInsert.add(Trivia.createSkippedText(token));
         }
-      }
-
-      String[] dirAndValue = getDirectiveAndValue(token);
-      String dir = dirAndValue[0];
-      if (dir.equals("define")) {
-        locallyDefinedSymbols.add(dirAndValue[1]);
-      } else if (dir.equals("undef")) {
-        while (locallyDefinedSymbols.remove(dirAndValue[1])) {
-        }
-      } else if (dir.equals("if")) {
-        isActiveStack.add(isValueDefined(dirAndValue[1]));
-      } else if (dir.equals("elif")) {
-        isActiveStack.remove(isActiveStack.size() - 1);
-        isActiveStack.add(isValueDefined(dirAndValue[1]));
-      } else if (dir.equals("else")) {
-        isActiveStack.set(isActiveStack.size() - 1, !(isActiveStack.get(isActiveStack.size() - 1)));
-      } else if (dir.equals("endif")) {
-        isActiveStack.remove(isActiveStack.size() - 1);
         if (isActiveStack.size() == 0) {
           break;
         }
-      } else {
-        triviasToInsert.add(Trivia.createSkippedText(token));
       }
     }
     return position;
   }
 
-  private Boolean isValueDefined(String str) {
+  private Boolean isConditionTrue(String str) {
+    if (str.length() > 0 && str.charAt(0) == '!') {
+      return !isSymbolDefined(str.substring(1));
+    }
+    return isSymbolDefined(str);
+  }
+
+  private Boolean isSymbolDefined(String str) {
     if (str.equalsIgnoreCase("false")) {
       return false;
     }
@@ -135,11 +140,11 @@ public class StandardPreprocessorLinePreprocessor extends Preprocessor {
   private String[] getDirectiveAndValue(Token token) {
     String tokenValue = token.getValue().substring(1).trim();
     int indexOfSpace = tokenValue.indexOf(' ');
-    if (indexOfSpace == -1) {
+    if (indexOfSpace < 0) {
       return new String[] {tokenValue.toLowerCase()};
     }
     String directive = tokenValue.substring(0, indexOfSpace);
-    String value = tokenValue.substring(indexOfSpace + 1);
+    String value = tokenValue.substring(indexOfSpace + 1).trim();
     return new String[] {directive, value};
   }
 

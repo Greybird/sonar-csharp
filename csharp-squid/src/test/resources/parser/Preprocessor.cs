@@ -22,6 +22,11 @@ public class Test
 #else
   INVALID
 #endif
+#if !AAA
+  INVALID
+#else
+  private void Test1Negative() {}
+#endif
 #undef AAA
 #if AAA
   INVALID
