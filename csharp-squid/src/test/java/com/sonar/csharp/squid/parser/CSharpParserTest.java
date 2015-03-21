@@ -19,6 +19,8 @@
  */
 package com.sonar.csharp.squid.parser;
 
+import com.google.common.collect.Lists;
+
 import com.sonar.csharp.squid.CSharpConfiguration;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.impl.Parser;
@@ -54,4 +56,11 @@ public class CSharpParserTest {
     parser.parse(FileUtils.toFile(getClass().getResource("/parser/cSharpSyntaxAllInOneFile.cs")));
   }
 
+  @Test
+  public void testPreprocessor() {
+    CSharpConfiguration config = new CSharpConfiguration(Charset.forName("UTF-8"));
+    config.setDefinedSymbols(Lists.newArrayList("BBB"));
+    Parser<Grammar> parser2 = CSharpParser.create(config);
+    parser2.parse(FileUtils.toFile(getClass().getResource("/parser/Preprocessor.cs")));
+  }
 }

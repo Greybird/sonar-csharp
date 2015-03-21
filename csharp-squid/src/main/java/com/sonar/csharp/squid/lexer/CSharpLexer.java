@@ -103,7 +103,7 @@ public final class CSharpLexer {
         builder.withPreprocessor(preprocessor);
       }
     } else {
-      builder.withPreprocessor(new StandardPreprocessorLinePreprocessor());
+      builder.withPreprocessor(new StandardPreprocessorLinePreprocessor(conf));
     }
 
     return builder.build();

@@ -25,6 +25,7 @@ public final class CSharpSquidConstants {
   public static final String REPOSITORY_NAME = "SonarQube";
 
   public static final String IGNORE_HEADER_COMMENTS = "sonar.cs.ignoreHeaderComments";
+  public static final String DEFINED_SYMBOLS = "sonar.cs.definedSymbols";
 
   private CSharpSquidConstants() {
   }

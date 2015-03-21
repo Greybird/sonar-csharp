@@ -126,6 +126,7 @@ public final class CSharpSquidSensor implements Sensor {
   private CSharpConfiguration createParserConfiguration(Project project) {
     CSharpConfiguration conf = new CSharpConfiguration(fileSystem.sourceCharset());
     conf.setIgnoreHeaderComments(settings.getBoolean(CSharpSquidConstants.IGNORE_HEADER_COMMENTS));
+    conf.setDefinedSymbols(Lists.newArrayList(settings.getStringArray(CSharpSquidConstants.DEFINED_SYMBOLS)));
     return conf;
   }
 

@@ -22,10 +22,13 @@ package com.sonar.csharp.squid;
 import org.sonar.squidbridge.api.SquidConfiguration;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class CSharpConfiguration extends SquidConfiguration {
 
   private boolean ignoreHeaderComments = true;
+  private ArrayList<String> definedSymbols = new ArrayList<String>();
 
   public CSharpConfiguration(Charset charset) {
     super(charset);
@@ -41,6 +44,14 @@ public class CSharpConfiguration extends SquidConfiguration {
 
   public boolean getIgnoreHeaderComments() {
     return ignoreHeaderComments;
+  }
+
+  public void setDefinedSymbols(Collection<String> symbols) {
+    this.definedSymbols = new ArrayList<String>(symbols);
+  }
+
+  public Collection<String> getDefinedSymbols() {
+    return definedSymbols;
   }
 
 }
