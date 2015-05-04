@@ -35,6 +35,7 @@ public class CSharpCodeCoverageProvider {
   private static final String CATEGORY = "C#";
   private static final String SUBCATEGORY = "Code Coverage";
 
+  private static final String GLOBALCACHE_PROPERTY_KEY = "sonar.cs.coverage.useGlobalCache";
   private static final String NCOVER3_PROPERTY_KEY = "sonar.cs.ncover3.reportsPaths";
   private static final String OPENCOVER_PROPERTY_KEY = "sonar.cs.opencover.reportsPaths";
   private static final String DOTCOVER_PROPERTY_KEY = "sonar.cs.dotcover.reportsPaths";
@@ -42,6 +43,7 @@ public class CSharpCodeCoverageProvider {
 
   private static final CoverageConfiguration COVERAGE_CONF = new CoverageConfiguration(
     CSharpPlugin.LANGUAGE_KEY,
+    GLOBALCACHE_PROPERTY_KEY,
     NCOVER3_PROPERTY_KEY,
     OPENCOVER_PROPERTY_KEY,
     DOTCOVER_PROPERTY_KEY,
@@ -94,8 +96,8 @@ public class CSharpCodeCoverageProvider {
 
   public static class CSharpCoverageReportImportSensor extends CoverageReportImportSensor {
 
-    public CSharpCoverageReportImportSensor(CSharpCoverageAggregator coverageAggregator, FileSystem fs) {
-      super(COVERAGE_CONF, coverageAggregator, fs);
+    public CSharpCoverageReportImportSensor(Settings settings, FileSystem fs, CSharpCoverageAggregator coverageAggregator) {
+      super(settings, COVERAGE_CONF, coverageAggregator, fs);
     }
 
   }
